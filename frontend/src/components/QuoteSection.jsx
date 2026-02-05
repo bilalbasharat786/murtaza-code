@@ -5,6 +5,32 @@ import backgroundImage2 from "../assets/Hero2.jpg";
 const QuoteSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    service: "",
+    message: ""
+  });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const myPhoneNumber = "923275372176"; 
+    const whatsappMessage = `
+*New Quote Request:*
+-----------------------
+*Name:* ${formData.name}
+*Email:* ${formData.email}
+*Mobile:* ${formData.mobile}
+*Service Type:* ${formData.service}
+*Message:* ${formData.message}
+    `;
+    const url = `https://wa.me/${myPhoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+    window.open(url, '_blank');
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -57,33 +83,54 @@ const QuoteSection = () => {
         style={{ backgroundImage: `url(${backgroundImage2})` }}
       >
         <div className="relative z-10 bg-white p-8 md:p-12 shadow-lg rounded-sm w-full max-w-xl">
-          <form className="space-y-6">
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Your Name"
+                required
                 className="w-full border border-gray-300 px-4 py-3 rounded-sm focus:outline-none focus:border-orange-500 transition"
               />
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Your Email"
+                required
                 className="w-full border border-gray-300 px-4 py-3 rounded-sm focus:outline-none focus:border-orange-500 transition"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <input
                 type="text"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
                 placeholder="Your Mobile"
+                required
                 className="w-full border border-gray-300 px-4 py-3 rounded-sm focus:outline-none focus:border-orange-500 transition"
               />
-              <select className="w-full border border-gray-300 px-4 py-3 rounded-sm focus:outline-none focus:border-orange-500 transition text-gray-500 bg-white">
+              <select 
+                name="service"
+                value={formData.service}
+                onChange={handleChange}
+                className="w-full border border-gray-300 px-4 py-3 rounded-sm focus:outline-none focus:border-orange-500 transition text-gray-500 bg-white"
+              >
                 <option value="">Service Type</option>
-                <option value="ac-install">AC Installation</option>
-                <option value="cooling">Cooling Services</option>
-                <option value="heating">Heating Services</option>
+                <option value="AC Installation">AC Installation</option>
+                <option value="Cooling Services">Cooling Services</option>
+                <option value="Heating Services">Heating Services</option>
               </select>
             </div>
             <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
               placeholder="Message"
               rows="4"
               className="w-full border border-gray-300 px-4 py-3 rounded-sm focus:outline-none focus:border-orange-500 transition resize-none"
@@ -95,6 +142,7 @@ const QuoteSection = () => {
               Get A Free Quote
             </button>
           </form>
+
         </div>
       </div>
     </section>
